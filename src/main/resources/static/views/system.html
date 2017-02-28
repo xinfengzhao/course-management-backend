@@ -1,0 +1,64 @@
+<div class="container-fluid" ng-controller="systemController">
+    <p>年级管理</p>
+    <div class="form-inline" style="margin-top:10px; margin-left:5px">
+      <div class="form-group form-group-sm">
+     	  <label class="control-label">年级段</label>
+          <input type="text" class="form-control"  ng-model="newStage">
+          <label class="control-label">年级</label>
+          <input type="text" class="form-control"  ng-model="newGrade">
+	      <div class="input-group" style="margin-left:30px">
+		      <span class="input-group-btn">
+		        <button class="btn btn-sm btn-default" ng-click="add(newStage,newGrade)">添加</button>
+		      </span>
+	      </div>
+      </div>
+    </div>  
+    
+    <div class="form-inline" style="margin-top:10px; margin-left:5px">
+      <div class="form-group form-group-sm">
+     	  <label class="control-label">年级段</label>
+          <select class="form-control" ng-model="selectStage">
+	         <option value="">请选择</option>
+             <option ng-repeat="stage in stages">{{stage}}</option>
+	      </select>
+          <label class="control-label">年级</label>
+          <select class="form-control" ng-model="selectGrade">
+	         <option value="">请选择</option>
+             <option ng-repeat="grade in grades">{{grade}}</option>
+	      </select>
+		  <div class="input-group" style="margin-left:30px">
+			  <span class="input-group-btn">
+			    <button class="btn btn-sm btn-danger" ng-click="remove(selectStage,selectGrade)">删除</button>
+			  </span>
+		  </div>
+      </div>
+    </div>
+    
+    <p style="margin-top:40px">课程类别管理</p>
+    <div class="form-inline" style="margin-top:10px; margin-left:5px">
+      <div class="form-group form-group-sm">
+     	  <label class="control-label">课程类别</label>
+          <input type="text" class="form-control"  ng-model="newType">
+		  <div class="input-group" style="margin-left:30px">
+			  <span class="input-group-btn">
+			    <button class="btn btn-sm btn-default" ng-click="add2(newType)">添加</button>
+			  </span>
+		  </div>
+	   </div>
+    </div>
+    
+    <div class="form-inline" style="margin-top:10px; margin-left:5px">
+      <div class="form-group form-group-sm">
+     	  <label class="control-label">课程类别</label>
+          <select class="form-control" ng-model="selectType">
+	         <option value="">请选择</option>
+             <option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
+	      </select>
+	      <div class="input-group" style="margin-left:30px">
+		     <span class="input-group-btn">
+		        <button class="btn btn-sm btn-danger" ng-click="remove2(selectType)">删除</button>
+		     </span>
+	      </div>
+      </div>
+   </div>
+ </div>

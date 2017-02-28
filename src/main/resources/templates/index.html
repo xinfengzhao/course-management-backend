@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" ng-app="app">
+<head th:replace="fragments/head :: head (title='首页')"></head>
+
+<body ng-app="app">
+
+   <nav th:replace="fragments/navbar :: #navbar"></nav>
+  <nav th:replace="fragments/navbar :: #sidebar"></nav>
+
+  <div style="padding-left: 250px;">
+    <ui-view />
+  </div>
+  
+</body>
+
+</html>

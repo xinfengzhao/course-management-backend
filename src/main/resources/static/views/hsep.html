@@ -1,0 +1,214 @@
+<div class="container-fluid" ng-controller="coursesHsepController">
+   <div class="form-inline" style="margin-top:10px; margin-left:5px">
+      <div class="form-group form-group-sm">
+          <!--筛选处 获取到数据信息后 使用ng-repeat遍历显示  -->
+	      <label class="control-label">年级段</label>
+	      <select class="form-control" ng-model="params.stage">
+	         <option value="">不限</option>
+             <option ng-repeat="stage in stages">{{stage}}</option>
+	      </select>
+	      
+	      <label class="control-label">年级</label>
+	      <select class="form-control" ng-model="params.grade">
+	         <option value="">不限</option>
+             <option ng-repeat="grade in grades">{{grade}}</option>
+	      </select>
+	      
+	      <label class="control-label">类别</label>
+	      <select class="form-control" ng-model="params.type">
+	        <option value="">不限</option>
+	        <option ng-repeat="type in types" value="{{type.name}}">{{type.name}}</option>
+	      </select>
+	      <div class="input-group" style="margin-left:30px">
+		      <span class="input-group-btn">
+		        <button class="btn btn-sm btn-default" ng-click="search()">查询</button>
+		        <button type="button" class="btn btn-sm btn-success btn-create-course" data-toggle="modal" data-target="#modal_course_create">创建</button>
+		      </span>
+	      </div>
+      </div>  
+    </div>
+    
+    <!-- 表格 -->
+  <div style="min-height: 320px;" class="table-responsive table-container">
+    <table class="table table-condensed" style="margin-top: 10px;">
+      <thead>
+        <tr>
+          <td>序号</td>
+          <td>年级段</td>
+          <td>年级</td>
+          <td>科目</td>
+          <td>类型</td>
+          <td>单价（元/时）</td>
+          <td>最短上课时长（时 ）</td>
+          <td>操作</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="course in courses">
+          <td>{{$index+1}}</td>
+          <td>{{course.stage}}</td>
+          <td>{{course.grade}}</td>
+          <td>{{course.name}}</td>
+          <td>{{course.type}}</td>
+          <td>{{course.price/100}}</td>
+          <td>{{course.hours/3600}}</td>
+          <!-- 操作选项 -->
+          <td>
+              <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-id="{{course.id}}" data-target="#modal_course_modify">修改</button>
+              <button type="button" class="btn btn-warning btn-xs" data-confirm-text="确认" ng-click="cancel($event, course.id)">删除</button>
+          </td>
+        </tr>
+        <tr ng-if="!courses || courses.length == 0">
+          <td colspan="10">
+            <div class="color-alert"> 不存在任何课程记录 </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align: center;">
+      <nav>
+     <ul class="pager">
+       <li><a href="javascript: void(0);" class="btn btn-default btn-xs button_page_turning" data-direction="-1">上一页</a></li>
+       <li><span>{{(params.paging[0] || 0) + 1 }} / {{count}}</span></li>
+       <li><a href="javascript: void(0);" class="btn btn-default btn-xs button_page_turning" data-direction="+1">下一页</a></li>
+     </ul>
+   </nav>
+  </div>
+  
+  <!-- 创建课程 -->
+  <div class="modal fade modal-default" id="modal_course_create" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="courseCreationController">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+
+          <h4 style="margin-top: 0px; text-align: center;"><strong>创建课程</strong></h4>
+          <form class="form-horizontal" style="margin: 20px 0px;">
+           <div class="form-group">
+              <label class="col-sm-4 control-label">年级段</label>
+              <div class="col-sm-6">
+                <select class="form-control" ng-model="course.stage">
+                  <option value="">选择年级段</option>
+                  <option ng-repeat="stage in stages">{{stage}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-4 control-label">年级</label>
+              <div class="col-sm-6">
+                <select class="form-control" ng-model="course.grade">
+                  <option value="">选择年级</option>
+                  <option ng-repeat="grade in grades">{{grade}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-4 control-label">类别</label>
+              <div class="col-sm-6">
+                <select class="form-control" ng-model="course.type">
+                  <option value="">选择类别</option>
+                  <option ng-repeat="type in types" value="{{type.name}}">{{type.name}}</option>
+                </select>
+              </div>
+            </div>
+		    <div class="form-group">
+             <label class="col-sm-4 control-label">科目</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" ng-model="course.name"/>
+              </div>
+            </div>  
+		    <div class="form-group">
+              <label class="col-sm-4 control-label">单价（元/小时）</label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control" ng-model="course.price" placeholder="默认0元/小时"/>
+              </div>
+            </div> 
+            <div class="form-group">
+              <label class="col-sm-4 control-label">最短上课时长（小时）</label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control" ng-model="course.hours" placeholder="默认0小时"/>
+              </div>
+            </div> 
+
+          </form>
+
+          <div style="text-align: right;">
+            <span class="text-warning warning-message hidden"></span>
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-submit btn-sm btn-warning" data-loading-text="提交...">创建</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- class="modal-dialog" -->
+  </div>
+  
+  <!-- 修改课程 -->
+  <div class="modal fade modal-default" id="modal_course_modify" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="courseModifyController">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+
+          <h4 style="margin-top: 0px; text-align: center;"><strong>修改课程</strong></h4>
+          <form class="form-horizontal" style="margin: 20px 0px;">
+           <div class="form-group">
+              <label class="col-sm-4 control-label">年级段</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" readonly="readonly" ng-model="course.stage"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-4 control-label">年级</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" readonly="readonly" ng-model="course.grade"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-4 control-label">类别</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" readonly="readonly" ng-model="course.type"/>
+              </div>
+            </div>
+		    <div class="form-group">
+             <label class="col-sm-4 control-label">科目</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" ng-model="course.name"/>
+              </div>
+            </div>  
+		    <div class="form-group">
+              <label class="col-sm-4 control-label">单价（元/小时）</label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control" ng-model="course.price"/>
+              </div>
+            </div> 
+            <div class="form-group">
+              <label class="col-sm-4 control-label">最短上课时长（小时）</label>
+              <div class="col-sm-6">
+                <input type="number" class="form-control" ng-model="course.hours"/>
+              </div>
+            </div> 
+
+          </form>
+
+          <div style="text-align: right;">
+            <span class="text-warning warning-message hidden"></span>
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-submit btn-sm btn-warning">修改</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- class="modal-dialog" -->
+  </div>
+  
+</div>
+
+
+  
+  
